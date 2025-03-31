@@ -15,6 +15,7 @@
 .button-operator:hover {
     -fx-background-color: grey;
     -fx-text-fill: black;
+
 }
 
 .result-label {

@@ -53,10 +53,6 @@ public class App extends Application {
         buttonDone.getStyleClass().add("button-operator");
         GridPane.setConstraints(buttonDone, buttonOperatorColumn,5);
 
-        for() {
-
-        }
-
         gridPane.getChildren().addAll(resultLabel, buttonAdd, buttonMin, buttonDiv, buttonMul, buttonDone);
 
         Scene scene = new Scene(gridPane ,416,624);
