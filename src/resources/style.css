@@ -1,0 +1,26 @@
+.button-operator {
+    -fx-background-color: orange;
+    -fx-text-fill: white;
+    -fx-pref-width: 104;
+    -fx-pref-height: 104;
+    -fx-background-radius: 0;
+    -fx-font-weight: 900;
+    -fx-font-size: 32;
+    -fx-text-align: center;
+    -fx-border-size: 1;
+    -fx-border-color: white;
+    -fx-font-family: Manrope;
+}
+
+.button-operator:hover {
+    -fx-background-color: grey;
+    -fx-text-fill: black;
+}
+
+.result-label {
+    -fx-background-color: grey;
+    -fx-text-fill: black;
+    -fx-pref-width: 416;
+    -fx-pref-height: 104;
+    -fx-text-align: right;
+}
