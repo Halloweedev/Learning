@@ -101,7 +101,6 @@ public class App extends Application {
         } else {
             System.out.println("CSS file not found!");
         }
-
         // Initialize scene
         primaryStage.setScene(scene);
         primaryStage.show();
