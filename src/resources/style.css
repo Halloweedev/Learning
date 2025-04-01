@@ -2,26 +2,68 @@
     -fx-background-color: orange;
     -fx-text-fill: white;
     -fx-pref-width: 104;
-    -fx-pref-height: 104;
+    -fx-pref-height: 96;
     -fx-background-radius: 0;
     -fx-font-weight: 900;
     -fx-font-size: 32;
     -fx-text-align: center;
-    -fx-border-size: 1;
-    -fx-border-color: white;
+    -fx-border-color: #2c2c2c;
+    -fx-border-width: 1;
     -fx-font-family: Manrope;
+    -fx-border-style: solid;
 }
 
 .button-operator:hover {
     -fx-background-color: grey;
     -fx-text-fill: black;
+}
 
+.button-numbers {
+    -fx-background-color: grey;
+    -fx-text-fill: white;
+    -fx-pref-width: 104;
+    -fx-pref-height: 96;
+    -fx-background-radius: 0;
+    -fx-font-weight: 900;
+    -fx-font-size: 32;
+    -fx-text-align: center;
+    -fx-border-color: #2c2c2c;
+    -fx-border-width: 1;
+    -fx-font-family: Manrope;
+}
+
+.button-zero {
+    -fx-background-color: grey;
+    -fx-text-fill: white;
+    -fx-pref-width: 208;
+    -fx-pref-height: 96;
+    -fx-background-radius: 0;
+    -fx-font-weight: 900;
+    -fx-font-size: 32;
+    -fx-text-align: center;
+    -fx-border-color: #2c2c2c;
+    -fx-border-width: 1;
+    -fx-font-family: Manrope;
+}
+
+.button-numbers:pressed {
+    -fx-background-color: #2c2c2c;
+    -fx-border-width: 1;
+    -fx-border-color: #2c2c2c;
+    -fx-text-fill: white;
+}
+
+.button-zero:pressed {
+    -fx-background-color: #2c2c2c;
+    -fx-border-width: 2;
+    -fx-border-color: #2c2c2c;
+    -fx-text-fill: white;
 }
 
 .result-label {
-    -fx-background-color: grey;
-    -fx-text-fill: black;
+    -fx-background-color: #2c2c2c;
+    -fx-text-fill: white;
     -fx-pref-width: 416;
-    -fx-pref-height: 104;
+    -fx-pref-height: 144;
     -fx-text-align: right;
 }

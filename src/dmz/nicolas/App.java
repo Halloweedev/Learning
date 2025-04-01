@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.net.URL;
 
@@ -24,7 +25,6 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Halloweed's Calculator");
         GridPane gridPane = new GridPane();
-        AnchorPane anchorPane = new AnchorPane();
 
         // Column then row
         resultLabel = new Label();
@@ -53,7 +53,43 @@ public class App extends Application {
         buttonDone.getStyleClass().add("button-operator");
         GridPane.setConstraints(buttonDone, buttonOperatorColumn,5);
 
-        gridPane.getChildren().addAll(resultLabel, buttonAdd, buttonMin, buttonDiv, buttonMul, buttonDone);
+        Button buttonClear = new Button("C");
+        buttonClear.getStyleClass().add("button-zero");
+        GridPane.setConstraints(buttonClear, 0, 1);
+        GridPane.setColumnSpan(buttonClear, 2);
+
+        Button buttonHistory = new Button("H");
+        buttonHistory.getStyleClass().add("button-numbers");
+        GridPane.setConstraints(buttonHistory, 2, 1);
+
+        for(int i = 0; i <= 10; i++) {
+            Button buttonNumber = new Button(String.valueOf(i));
+            int index = i - 1;
+            int row = 2 - (index / 3);
+            int col = index % 3;
+
+            // Adds a zero button
+            if(i == 0) {
+                col = 0;
+                row = 3;
+                buttonNumber.getStyleClass().add("button-zero");
+                GridPane.setRowSpan(buttonNumber, 1);
+                GridPane.setColumnSpan(buttonNumber, 2);
+            }
+            // Adds a comma button
+            if(i == 10) {
+                col = 2;
+                row = 3;
+                buttonNumber.setText(",");
+                GridPane.setRowSpan(buttonNumber, 1);
+            }
+
+            buttonNumber.getStyleClass().add("button-numbers");
+            gridPane.add(buttonNumber, col, row + 2); // +2 to start two rows under the resultLabel
+
+        }
+
+        gridPane.getChildren().addAll(resultLabel, buttonAdd, buttonMin, buttonDiv, buttonMul, buttonDone, buttonClear, buttonHistory);
 
         Scene scene = new Scene(gridPane ,416,624);
 
@@ -66,6 +102,7 @@ public class App extends Application {
             System.out.println("CSS file not found!");
         }
 
+        // Initialize scene
         primaryStage.setScene(scene);
         primaryStage.show();
 
