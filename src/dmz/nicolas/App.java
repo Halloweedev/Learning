@@ -1,19 +1,19 @@
 package dmz.nicolas;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.event.MouseEvent;
 import java.net.URL;
 
 public class App extends Application {
@@ -25,7 +25,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Halloweed's Calculator");
         GridPane gridPane = new GridPane();
-
+        StackPane stackPane = new StackPane();
         // Column then row
         resultLabel = new Label();
         resultLabel.getStyleClass().add("result-label");
@@ -33,6 +33,28 @@ public class App extends Application {
         GridPane.setRowSpan(resultLabel, 1);
         GridPane.setColumnSpan(resultLabel, 5);
 
+        // Stackpane overlay buttons
+        Button buttonOverlay = new Button("Overlay");
+        StackPane.setAlignment(buttonOverlay, Pos.TOP_LEFT);
+        StackPane.setMargin(buttonOverlay, new Insets(10, 0, 0, 10));
+        Button buttonOverlay2 = new Button("Overlay2");
+        StackPane.setAlignment(buttonOverlay2, Pos.TOP_LEFT);
+        StackPane.setMargin(buttonOverlay2, new Insets(10, 0, 0, 10));
+        buttonOverlay2.setVisible(false);
+        // Set always on top
+        buttonOverlay.setOnAction(event -> {
+            primaryStage.setAlwaysOnTop(true);
+            buttonOverlay.setVisible(false);
+            buttonOverlay2.setVisible(true);
+        });
+        // Remove always on top
+        buttonOverlay2.setOnAction(event -> {
+            primaryStage.setAlwaysOnTop(false);
+            buttonOverlay2.setVisible(false);
+            buttonOverlay.setVisible(true);
+        });
+
+            // GridPane buttons
         Button buttonAdd = new Button("+");
         buttonAdd.getStyleClass().add("button-operator");
         GridPane.setConstraints(buttonAdd, buttonOperatorColumn,1);
@@ -61,11 +83,13 @@ public class App extends Application {
         Button buttonHistory = new Button("H");
         buttonHistory.getStyleClass().add("button-numbers");
         GridPane.setConstraints(buttonHistory, 2, 1);
+        // GridPane buttons finish
 
-        for(int i = 0; i <= 10; i++) {
+        // Create the number buttons
+        for(int i = 0; i <= 10; i++) { // 11 buttons, 9 for the numpads, 1 for zero, 1 for comma
             Button buttonNumber = new Button(String.valueOf(i));
-            int index = i - 1;
-            int row = 2 - (index / 3);
+            int index = i - 1; // To make sure we start at the right position on the grid, otherwise the grid is offset by 1
+            int row = index / 3; // // Determine row (starting from bottom)
             int col = index % 3;
 
             // Adds a zero button
@@ -90,8 +114,9 @@ public class App extends Application {
         }
 
         gridPane.getChildren().addAll(resultLabel, buttonAdd, buttonMin, buttonDiv, buttonMul, buttonDone, buttonClear, buttonHistory);
+        stackPane.getChildren().addAll(gridPane, buttonOverlay, buttonOverlay2);
 
-        Scene scene = new Scene(gridPane ,416,624);
+        Scene scene = new Scene(stackPane ,416,624);
 
         // Ensure the CSS file path is correct
         URL cssResource = getClass().getResource("/resources/style.css");
