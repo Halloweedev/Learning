@@ -1,25 +1,16 @@
 package dmz.nicolas;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import java.awt.event.MouseEvent;
 import java.net.URL;
 
 public class App extends Application {
-
-    private Label resultLabel;
-    private int buttonOperatorColumn = 4;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,7 +18,7 @@ public class App extends Application {
         GridPane gridPane = new GridPane();
         StackPane stackPane = new StackPane();
         // Column then row
-        resultLabel = new Label();
+        Label resultLabel = new Label();
         resultLabel.getStyleClass().add("result-label");
         GridPane.setConstraints(resultLabel, 0, 0);
         GridPane.setRowSpan(resultLabel, 1);
@@ -57,6 +48,7 @@ public class App extends Application {
             // GridPane buttons
         Button buttonAdd = new Button("+");
         buttonAdd.getStyleClass().add("button-operator");
+        int buttonOperatorColumn = 4;
         GridPane.setConstraints(buttonAdd, buttonOperatorColumn,1);
 
         Button buttonMin = new Button("-");
