@@ -85,9 +85,7 @@ public class App extends Application {
         GridPane.setConstraints(buttonClear, 0, 1);
         GridPane.setColumnSpan(buttonClear, 2);
 
-        buttonClear.setOnAction(actionEvent -> {
-            resultLabel.setText("0");
-        });
+        buttonClear.setOnAction(actionEvent -> resultLabel.setText("0"));
 
         Button buttonHistory = new Button("H");
         buttonHistory.getStyleClass().add("button-numbers");
