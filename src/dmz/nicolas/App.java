@@ -9,17 +9,30 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class App extends Application {
+
+    private DecimalFormat decimalFormat = new DecimalFormat("#.###");
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Halloweed's Calculator");
         GridPane gridPane = new GridPane();
         StackPane stackPane = new StackPane();
-        // Column then row
-        Label resultLabel = new Label();
+
+        Label resultLabel = new Label("0");
         resultLabel.getStyleClass().add("result-label");
+        resultLabel.setAlignment(Pos.CENTER_RIGHT);
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setGroupingSeparator('.');
+        decimalFormat = new DecimalFormat("#,###", symbols);
+
+        // Column then row
         GridPane.setConstraints(resultLabel, 0, 0);
         GridPane.setRowSpan(resultLabel, 1);
         GridPane.setColumnSpan(resultLabel, 5);
@@ -72,6 +85,10 @@ public class App extends Application {
         GridPane.setConstraints(buttonClear, 0, 1);
         GridPane.setColumnSpan(buttonClear, 2);
 
+        buttonClear.setOnAction(actionEvent -> {
+            resultLabel.setText("0");
+        });
+
         Button buttonHistory = new Button("H");
         buttonHistory.getStyleClass().add("button-numbers");
         GridPane.setConstraints(buttonHistory, 2, 1);
@@ -99,6 +116,25 @@ public class App extends Application {
                 buttonNumber.setText(",");
                 GridPane.setRowSpan(buttonNumber, 1);
             }
+
+            //Gets text from buttons to resultLabel
+            final String finalI = buttonNumber.getText();
+            buttonNumber.setOnAction(event -> {
+                if (resultLabel.getText().equals("0")) {
+                    resultLabel.setText(finalI);
+                } else {
+                    resultLabel.setText(resultLabel.getText() + finalI);
+                }
+                // Format the number with thousands separators
+                try {
+                    Number number = decimalFormat.parse(resultLabel.getText());
+                    resultLabel.setText(decimalFormat.format(number));
+                } catch (ParseException e) {
+                    // Handle the case where the text is not a valid number
+                    resultLabel.setText(resultLabel.getText());
+                }
+            });
+
 
             buttonNumber.getStyleClass().add("button-numbers");
             gridPane.add(buttonNumber, col, row + 2); // +2 to start two rows under the resultLabel
