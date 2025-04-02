@@ -17,6 +17,11 @@ import java.util.Locale;
 public class App extends Application {
 
     private DecimalFormat decimalFormat = new DecimalFormat("#.###");
+    private final StringBuilder currentInput = new StringBuilder();
+    private double currentTotal = 0;
+    private char lastOperator = ' ';
+    private Label resultDisplayLabel = new Label("0");
+    private boolean newNumber = true;
 
     @Override
     public void start(Stage primaryStage) {
@@ -24,18 +29,17 @@ public class App extends Application {
         GridPane gridPane = new GridPane();
         StackPane stackPane = new StackPane();
 
-        Label resultLabel = new Label("0");
-        resultLabel.getStyleClass().add("result-label");
-        resultLabel.setAlignment(Pos.CENTER_RIGHT);
+        resultDisplayLabel.getStyleClass().add("result-label");
+        resultDisplayLabel.setAlignment(Pos.CENTER_RIGHT);
 
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
         symbols.setGroupingSeparator('.');
         decimalFormat = new DecimalFormat("#,###", symbols);
 
         // Column then row
-        GridPane.setConstraints(resultLabel, 0, 0);
-        GridPane.setRowSpan(resultLabel, 1);
-        GridPane.setColumnSpan(resultLabel, 5);
+        GridPane.setConstraints(resultDisplayLabel, 0, 0);
+        GridPane.setRowSpan(resultDisplayLabel, 1);
+        GridPane.setColumnSpan(resultDisplayLabel, 5);
 
         // Stackpane overlay buttons
         Button buttonOverlay = new Button("Overlay");
@@ -58,39 +62,40 @@ public class App extends Application {
             buttonOverlay.setVisible(true);
         });
 
-            // GridPane buttons
-        Button buttonAdd = new Button("+");
-        buttonAdd.getStyleClass().add("button-operator");
-        int buttonOperatorColumn = 4;
-        GridPane.setConstraints(buttonAdd, buttonOperatorColumn,1);
-
-        Button buttonMin = new Button("-");
-        buttonMin.getStyleClass().add("button-operator");
-        GridPane.setConstraints(buttonMin, buttonOperatorColumn,2);
-
-        Button buttonDiv = new Button("/");
-        buttonDiv.getStyleClass().add("button-operator");
-        GridPane.setConstraints(buttonDiv, buttonOperatorColumn,3);
-
-        Button buttonMul = new Button("x");
-        buttonMul.getStyleClass().add("button-operator");
-        GridPane.setConstraints(buttonMul, buttonOperatorColumn,4);
-
-        Button buttonDone = new Button("=");
-        buttonDone.getStyleClass().add("button-operator");
-        GridPane.setConstraints(buttonDone, buttonOperatorColumn,5);
-
         Button buttonClear = new Button("C");
         buttonClear.getStyleClass().add("button-zero");
         GridPane.setConstraints(buttonClear, 0, 1);
         GridPane.setColumnSpan(buttonClear, 2);
-
-        buttonClear.setOnAction(actionEvent -> resultLabel.setText("0"));
+        buttonClear.setOnAction(actionEvent -> clearRegistry());
 
         Button buttonHistory = new Button("H");
         buttonHistory.getStyleClass().add("button-numbers");
         GridPane.setConstraints(buttonHistory, 2, 1);
-        // GridPane buttons finish
+
+
+        // for loop for operator buttons
+        for(int i = 0; i <= 4; i++) {
+            Button buttonOperators = new Button(String.valueOf(i));
+
+            double num1;
+            double num2;
+
+            if(i == 0) {
+                buttonOperators.setText("+");
+            }
+
+            if(i == 1) buttonOperators.setText("-");
+            if(i == 2) buttonOperators.setText("/");
+            if(i == 3) buttonOperators.setText("x");
+            if(i == 4) {
+                buttonOperators.setText("=");
+            }
+
+            buttonOperators.getStyleClass().add("button-operator");
+            gridPane.add(buttonOperators, 4, 1 + i); // 4 columns and start 1 row lower for the right placement
+
+        }
+
 
         // Create the number buttons
         for(int i = 0; i <= 10; i++) { // 11 buttons, 9 for the numpads, 1 for zero, 1 for comma
@@ -115,31 +120,31 @@ public class App extends Application {
                 GridPane.setRowSpan(buttonNumber, 1);
             }
 
-            //Gets text from buttons to resultLabel
+            //Gets text from buttons to resultDisplayLabel
             final String finalI = buttonNumber.getText();
             buttonNumber.setOnAction(event -> {
-                if (resultLabel.getText().equals("0")) {
-                    resultLabel.setText(finalI);
+                if (resultDisplayLabel.getText().equals("0")) {
+                    resultDisplayLabel.setText(finalI);
                 } else {
-                    resultLabel.setText(resultLabel.getText() + finalI);
+                    resultDisplayLabel.setText(resultDisplayLabel.getText() + finalI);
                 }
                 // Format the number with thousands separators
                 try {
-                    Number number = decimalFormat.parse(resultLabel.getText());
-                    resultLabel.setText(decimalFormat.format(number));
+                    Number number = decimalFormat.parse(resultDisplayLabel.getText());
+                    resultDisplayLabel.setText(decimalFormat.format(number));
                 } catch (ParseException e) {
                     // Handle the case where the text is not a valid number
-                    resultLabel.setText(resultLabel.getText());
+                    resultDisplayLabel.setText(resultDisplayLabel.getText());
                 }
             });
 
 
             buttonNumber.getStyleClass().add("button-numbers");
-            gridPane.add(buttonNumber, col, row + 2); // +2 to start two rows under the resultLabel
+            gridPane.add(buttonNumber, col, row + 2); // +2 to start two rows under the resultDisplayLabel
 
         }
 
-        gridPane.getChildren().addAll(resultLabel, buttonAdd, buttonMin, buttonDiv, buttonMul, buttonDone, buttonClear, buttonHistory);
+        gridPane.getChildren().addAll(resultDisplayLabel, buttonClear, buttonHistory);
         stackPane.getChildren().addAll(gridPane, buttonOverlay, buttonOverlay2);
 
         Scene scene = new Scene(stackPane ,416,624);
@@ -156,6 +161,27 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+
+    private void clearRegistry() {
+        currentInput.setLength(0);
+        currentTotal = 0.0;
+        lastOperator = ' ';
+        newNumber = true;
+        updateDisplay();
+    }
+
+    private void updateDisplay() {
+        if (currentInput.length() > 0) {
+            resultDisplayLabel.setText(currentInput.toString());
+        } else {
+            // Format the total to remove unnecessary decimal places
+            if (currentTotal == (long) currentTotal) {
+                resultDisplayLabel.setText(String.valueOf((long) currentTotal));
+            } else {
+                resultDisplayLabel.setText(String.valueOf(currentTotal));
+            }
+        }
     }
 
     public static void main(String[] args) {
